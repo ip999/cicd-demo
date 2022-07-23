@@ -4,17 +4,16 @@
 const express = require('express');
 const cors = require('cors');
 
+const sumHandler = require('./sumHandler');
+
 const PORT = 3000;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.post('/', sum);
+app.post('/', sumHandler);
 
-function sum(req, res) {
-    console.dir(req.body)
-    const { a, b } = req.body;
-    res.send(`${a} + ${b} = ${a + b}`);
-}
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
+
+

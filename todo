@@ -1,0 +1,8 @@
+fix tests for backend
+add frontend (use fresh?)
+add ci github actions
+check if shiftleft is still a thing?
+figure out tags/releases
+add cd github actions
+add deployment (dockerhub)
+add terraform
