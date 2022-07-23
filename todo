@@ -6,3 +6,8 @@ figure out tags/releases
 add cd github actions
 add deployment (dockerhub)
 add terraform
+
+
+if we get all fancy with appsec...
+add sql part to app
+https://www.npmjs.com/package/better-sqlite3
