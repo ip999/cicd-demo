@@ -27,5 +27,7 @@ jobs:
       uses: actions/setup-node@v3
     - name: Install dependencies
       run: yarn install --frozen-lockfile
+    - name: Install Jest
+      run: yarn global add jest
     - name: Run tests
       run: jest
