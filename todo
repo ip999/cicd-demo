@@ -7,6 +7,7 @@ add cd github actions
 add deployment (dockerhub)
 add terraform
 
+once all is working, protect main branch
 
 if we get all fancy with appsec...
 add sql part to app
