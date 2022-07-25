@@ -21,7 +21,12 @@ jobs:
       run: docker run -d -p 3000:3000 --name backend backend
     - name: Show Docker status
       run: docker ps
-
+    - name: Wait on container start
+      uses: iFaxity/wait-on-action@v1
+      with:
+        resource: http://localhost:3000
+        delay: 5000
+        timeout: 5000
     - name: Check API response
       run: |
         curl -X POST -H "Content-Type: application/json" -d '{"a": 1, "b": 2}' http://localhost:3000
