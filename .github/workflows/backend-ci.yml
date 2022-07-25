@@ -18,7 +18,7 @@ jobs:
       working-directory: ./backend
       run: docker build . --file Dockerfile --tag backend
     - name: Check Docker run
-      run: docker run -d -p 3000:3000 --name backend backend
+      run: docker run -d --network ${{ job.container.network}} -p 3000:3000 --name backend backend
     - name: Show Docker status
       run: docker ps
     - name: Wait on container start
