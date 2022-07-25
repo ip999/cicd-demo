@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  IMAGE_NAME: env.GITHUB_SHA
+  IMAGE_NAME: ${{ env.GITHUB_SHA }}
 
 jobs:
 
