@@ -38,9 +38,10 @@ jobs:
     - name: 🐳 Shutdown container
       working-directory: ./backend
       run: docker-compose -f docker-compose.yml down
+      
   create-deployment-image:
     needs: initial-tests
-      runs-on: ubuntu-latest
-      steps:
-      - name: whats here?
-        run: ls -la
+    runs-on: ubuntu-latest
+    steps:
+    - name: whats here?
+      run: ls -la
