@@ -26,6 +26,11 @@ jobs:
       uses: jakejarvis/wait-action@master
       with:
         time: '7s'
+    - name: 🕗 Wait on container readiness
+      uses: iFaxity/wait-on-action@v1
+      with:
+        resource: http-get://localhost:3000/readiness
+        timeout: 3000
     - name: 🧪 Check API response
       run: |
         curl -X POST -H "Content-Type: application/json" -d '{"a": 1, "b": 2}' http://localhost:3000
