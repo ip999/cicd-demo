@@ -22,12 +22,10 @@ jobs:
       run: docker-compose -f docker-compose.yml up -d
     - name: 🐳 Show Docker status
       run: docker ps
-    - name: 🕗 Wait on container start
-      uses: iFaxity/wait-on-action@v1
+    - name: 🕗 Sleep for 7 seconds
+      uses: jakejarvis/wait-action@master
       with:
-        resource: http://localhost:3000
-        delay: 5000
-        timeout: 5000
+        time: '7s'
     - name: 🧪 Check API response
       run: |
         curl -X POST -H "Content-Type: application/json" -d '{"a": 1, "b": 2}' http://localhost:3000
