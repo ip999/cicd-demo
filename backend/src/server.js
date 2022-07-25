@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.post('/', sumHandler);
-app.get('/readiness', readninessHandler);
+app.get('/readiness', readinessHandler);
 
 function readinessHandler(req, res) {
     res.status(200).send("ready");
