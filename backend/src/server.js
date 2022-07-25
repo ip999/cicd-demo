@@ -12,8 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.post('/', sumHandler);
+app.get('/readiness', readninessHandler);
 
+function readinessHandler(req, res) {
+    res.status(200).send("ready");
+}
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
-
-
