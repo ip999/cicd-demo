@@ -19,3 +19,11 @@ jobs:
       run: docker build . --file Dockerfile --tag backend
     - name: Check Docker run
       run: docker run -p 3000:3000 --name backend backend
+    - name: Wait on container start
+      uses: iFaxity/wait-on-action@v1
+      with:
+        resource: http://localhost:3000
+    - name: Check API response
+      run: curl -X POST -H 'Content-Type: application/json' -d '{"a": 1, "b": 2}' http://localhost:3000
+    - name: Shutdown container
+      run: docker kill backend
