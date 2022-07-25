@@ -18,7 +18,7 @@ jobs:
       working-directory: ./backend
       run: docker build . --file Dockerfile --tag backend
     - name: Check Docker run
-      run: docker run -p 3000:3000 --name backend backend
+      run: docker run -d -p 3000:3000 --name backend backend
     - name: Wait on container start
       uses: iFaxity/wait-on-action@v1
       with:
