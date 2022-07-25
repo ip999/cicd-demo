@@ -14,12 +14,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build Docker image
+    - name: 🐳 Build Docker image
       working-directory: ./backend
-      run: docker build . --file Dockerfile --tag backend
-    - name: Check Docker run
-      run: docker run -d --network ${{ job.container.network}} -p 3000:3000 --name backend backend
-    - name: Show Docker status
+      run: docker-compose -f docker-compose.yml build
+    - name: 🐳 Docker run
+      run: docker-compose -f docker-compose.yml up -d
+    - name: 🐳 Show Docker status
       run: docker ps
     - name: Wait on container start
       uses: iFaxity/wait-on-action@v1
