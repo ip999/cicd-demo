@@ -5,6 +5,16 @@ check if shiftleft is still a thing?
 figure out tags/releases
 add cd github actions
 add deployment (dockerhub)
+
+argocd plus kustomize
+
+prove it's working...
+    in github action add short commitsha into a build arg that is then available as an env var in the container
+    in kustomise insert a kubernetes env var 
+    in app add version endpoint that outputs build SHA from github and kubernetes
+    also display semver?
+
+
 add terraform
 
 once all is working, protect main branch
