@@ -79,13 +79,14 @@ jobs:
        kustomize edit set image backend=$DOCKER_USERNAME/backend:$GITHUB_SHA
        cat kustomization.yaml
     - name: ✅ Commit files
+      id: vars
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -am "Bump docker image version"
-        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        echo "::set-output name=sha_short2::$(git rev-parse --short HEAD)"
     - name: Check outputs
-      run: echo ${{ steps.vars.outputs.sha_short }}
+      run: echo ${{ steps.vars.outputs.sha_short2 }}
     - name: 🚀 Push changes
       uses: ad-m/github-push-action@master
       with:
