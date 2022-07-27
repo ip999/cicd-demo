@@ -56,7 +56,7 @@ jobs:
       run: |
         echo ${{ steps.vars.outputs.sha_short }}
         echo ${{ steps.version.outputs.current-version }}
-        $NPM_VERSION=${{ steps.version.outputs.current-version }}
+        export $NPM_VERSION=${{ steps.version.outputs.current-version }}
         echo "::set-output name=version::$NPM_VERSION"
     - name: 🐳 Docker meta
       id: meta
