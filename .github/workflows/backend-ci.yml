@@ -107,7 +107,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "Bump docker image version: ${{ steps.vars.outputs.sha_short2 }} ~ ${{needs.create-deployment-image.outputs.version}}"
+        git commit -am "Bump docker image version: ${{needs.create-deployment-image.outputs.version}}"
         echo "::set-output name=sha_short2::$(git rev-parse --short HEAD)"
     - name: Check outputs
       run: echo ${{ steps.vars.outputs.sha_short2 }}
