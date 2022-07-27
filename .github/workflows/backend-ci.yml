@@ -78,6 +78,7 @@ jobs:
             ip999/backend:${{ github.sha }}
             ip999/backend:latest
             ${{ steps.meta.outputs.tags }}
+            ip999/backend:${{ steps.version.outputs.current-version }}
         context: backend
     outputs:
       version: ${{ steps.pass-forward.outputs.version }}
