@@ -54,9 +54,10 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ${{ github.sha }}, latest
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/backend:${{ github.sha }}, 
+          ${{ secrets.DOCKER_USERNAME }}/backend:latest
         context: backend
-        repository: ${{ secrets.DOCKER_USERNAME }}/backend
   
   deploy:
     name: Deploy
