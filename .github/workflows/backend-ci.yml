@@ -75,7 +75,7 @@ jobs:
         tags: |
             ip999/backend:${{ github.sha }}
             ip999/backend:latest
-            {{ steps.meta.outputs.tags }}
+            ${{ steps.meta.outputs.tags }}
         context: backend
   
   deploy:
