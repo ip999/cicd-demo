@@ -44,15 +44,15 @@ jobs:
       id: vars
       run: |
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: get-npm-version
-      id: package_version
-      uses: martinbeentjes/npm-get-version-action@main
-      with:
-        path: backend
+    - name: Extract version
+      id: extract_version
+      uses: Saionaro/extract-package-version@v1.0.6
+        with:
+          path: backend
     - name: Check outputs
       run: |
         echo ${{ steps.vars.outputs.sha_short }}
-        echo ${{ steps.vars.outputs.package_version }}
+        echo ${{ steps.extract_version.outputs.version }}
     - name: 🔓 Login to DockerHub
       uses: docker/login-action@v2
       with:
