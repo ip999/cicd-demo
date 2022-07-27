@@ -54,9 +54,9 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: |
-          ip999/backend:${{ github.sha }}, 
-          ip999/backend:latest
+        tags:
+          - ip999/backend:${{ github.sha }}
+          - ip999/backend:latest
         context: backend
   
   deploy:
