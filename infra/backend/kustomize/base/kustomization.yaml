@@ -8,4 +8,4 @@ namespace: backend
 images:
 - name: backend
   newName: ip999/backend
-  newTag: a8dfd557d120aba1c57b96f97e6c612924d3aece
+  newTag: 30b4a732e930a87dcfbe129ed2b832bb25a556b0
