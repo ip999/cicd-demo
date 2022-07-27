@@ -55,8 +55,8 @@ jobs:
       with:
         push: true
         tags: |
-          ${{ secrets.DOCKER_USERNAME }}/backend:${{ github.sha }}, 
-          ${{ secrets.DOCKER_USERNAME }}/backend:latest
+          ip999/backend:${{ github.sha }}, 
+          ip999/backend:latest
         context: backend
   
   deploy:
