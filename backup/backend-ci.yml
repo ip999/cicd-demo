@@ -36,6 +36,40 @@ jobs:
         working-directory: ./backend
         run: docker-compose -f docker-compose.yml down
 
+  update-version:
+    name: 👊 Bump package version
+    needs: initial-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get current NPM Version (pre-bump)
+        id: pre-bump-version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: backend
+      - name: Show current version (pre-bump)
+        run: |
+          echo ${{ steps.pre-bump-version.outputs.current-version }}
+      - name: "Automated Version Bump"
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR: "backend"
+        with:
+          commit-message: "version bump to {{version}} [skip ci]"
+      - name: Get current NPM Version (post-bump)
+        id: post-bump-version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: backend
+      - name: Show current version (post-bump)
+        id: set-bumped-version
+        run: |
+          echo ${{ steps.post-bump-version.outputs.current-version }}
+          echo "::set-output name=version::${{ steps.post-bump-version.outputs.current-version }}"
+    outputs:
+      post-bump-version: ${{ steps.set-bumped-version.outputs.version }}
+
   create-deployment-image:
     name: 🏗️ Create deployment image
     needs: update-version
@@ -46,25 +80,18 @@ jobs:
         id: vars
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Get current NPM Version (pre-bump)
+      - name: Get current NPM Version
         id: version
         uses: martinbeentjes/npm-get-version-action@main
         with:
           path: backend
-      - name: 👊 Automated Version Bump
-        uses: "phips28/gh-action-bump-version@master"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR: "backend"
-        with:
-          commit-message: "version bump to {{version}} [skip ci]"
       - name: Check outputs and pass to future jobs
         id: pass-forward
         run: |
           echo sha: ${{ steps.vars.outputs.sha_short }}
           echo initial version: ${{ steps.version.outputs.current-version }}
-          echo post bump version: ${{ steps.post-bump-version.outputs.current-version }}
-          echo "::set-output name=version::${{ steps.post-bump-version.outputs.current-version }}"
+          echo post bump version: ${{ needs.update-version.outputs.post-bump-version }}
+          echo "::set-output name=version::${{ needs.update-version.outputs.post-bump-version }}"
       - name: 🐳 Docker meta
         id: meta
         uses: docker/metadata-action@v4
