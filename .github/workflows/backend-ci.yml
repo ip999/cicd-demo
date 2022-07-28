@@ -67,7 +67,7 @@ jobs:
       id: set-bumped-version
       run: |
         echo ${{ steps.post-bump-version.outputs.current-version }}
-        echo "::set-output name=post-bump-version::${{ steps.version.outputs.current-version }}"
+        echo "::set-output name=post-bump-version::${{ steps.post-bump-version.outputs.current-version }}
     outputs:
       post-bump-version: ${{ steps.set-bumped-version.outputs.version }}
 
