@@ -88,8 +88,9 @@ jobs:
     - name: Check outputs and pass to future jobs
       id: pass-forward
       run: |
-        echo ${{ steps.vars.outputs.sha_short }}
-        echo ${{ steps.version.outputs.current-version }}
+        echo sha: ${{ steps.vars.outputs.sha_short }}
+        echo initial version: ${{ steps.version.outputs.current-version }}
+        echo post bump version: ${{ steps.post-bump-version.outputs.current-version }}
         echo "::set-output name=version::${{ steps.version.outputs.current-version }}"
     - name: 🐳 Docker meta
       id: meta
@@ -115,6 +116,7 @@ jobs:
             ip999/backend:latest
             ${{ steps.meta.outputs.tags }}
             ip999/backend:${{ steps.version.outputs.current-version }}
+            ip999/backend:${{ steps.post-bump-version.outputs.current-version }}
         context: backend
     outputs:
       version: ${{ steps.pass-forward.outputs.version }}
@@ -139,14 +141,14 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
        cd infra/backend/kustomize/base
-       kustomize edit set image backend=$DOCKER_USERNAME/backend:${{needs.create-deployment-image.outputs.version}}
+       kustomize edit set image backend=$DOCKER_USERNAME/backend:${{needs.update-version.outputs.post-bump-version}}
        cat kustomization.yaml
     - name: ✅ Commit files
       id: vars
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "Bump docker image version: ${{needs.create-deployment-image.outputs.version}}"
+        git commit -am "Bump docker image version: ${{needs.update-version.outputs.post-bump-version}}"
         echo "::set-output name=sha_short2::$(git rev-parse --short HEAD)"
         git pull --rebase origin main
     - name: Check outputs
