@@ -135,7 +135,7 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
        cd infra/backend/kustomize/base
-       kustomize edit set image backend=$DOCKER_USERNAME/backend:$GITHUB_SHA
+       kustomize edit set image backend=$DOCKER_USERNAME/backend:${{needs.create-deployment-image.outputs.version}}
        cat kustomization.yaml
     - name: ✅ Commit files
       id: vars
