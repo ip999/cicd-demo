@@ -64,10 +64,12 @@ jobs:
       with:
         path: backend
     - name: Show current version (post-bump)
+      id: set-bumped-version
       run: |
         echo ${{ steps.post-bump-version.outputs.current-version }}
+        echo "::set-output name=version::${{ steps.version.outputs.current-version }}"
     outputs:
-      post-bump-version: ${{ steps.post-bump-version.outputs.current-version }}
+      post-bump-version: ${{ steps.set-bumped-version.outputs.current-version }}
 
 
   create-deployment-image:
