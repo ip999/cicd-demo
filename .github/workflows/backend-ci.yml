@@ -58,6 +58,11 @@ jobs:
           PACKAGEJSON_DIR: "backend"
         with:
           commit-message: "version bump to {{version}} [skip ci]"
+      - name: Get current NPM Version (post-bump)
+        id: post-bump-version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: backend
       - name: Check outputs and pass to future jobs
         id: pass-forward
         run: |
