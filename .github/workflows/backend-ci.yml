@@ -69,6 +69,7 @@ jobs:
           echo sha: ${{ steps.vars.outputs.sha_short }}
           echo initial version: ${{ steps.version.outputs.current-version }}
           echo post bump version: ${{ steps.post-bump-version.outputs.current-version }}
+          cat backend/package.json
           echo "::set-output name=version::${{ steps.post-bump-version.outputs.current-version }}"
       - name: 🐳 Docker meta
         id: meta
