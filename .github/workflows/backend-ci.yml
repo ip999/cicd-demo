@@ -12,6 +12,7 @@ on:
 
 jobs:
   initial-tests:
+    name: 🧪 Initial Tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -34,9 +35,42 @@ jobs:
     - name: 🐳 Shutdown container
       working-directory: ./backend
       run: docker-compose -f docker-compose.yml down
-      
-  create-deployment-image:
+
+
+  update-version:
+    name: 👊 Bump package version 
     needs: initial-tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Get current NPM Version (pre-bump)
+      id: pre-bump-version
+      uses: martinbeentjes/npm-get-version-action@main
+      with:
+        path: backend
+    - name: Show current version (pre-bump)
+      run: |
+        echo ${{ steps.pre-bump-version.outputs.current-version }}
+    - name:  'Automated Version Bump'
+      uses:  'phips28/gh-action-bump-version@master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PACKAGEJSON_DIR:  'backend'
+      with:
+        default: prerelease
+    - name: Get current NPM Version (post-bump)
+      id: post-bump-version
+      uses: martinbeentjes/npm-get-version-action@main
+      with:
+        path: backend
+    - name: Show current version (post-bump)
+      run: |
+        echo ${{ steps.post-bump-version.outputs.current-version }}
+
+
+  create-deployment-image:
+    name: 🏗️ Create deployment image
+    needs: update-version
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -44,7 +78,7 @@ jobs:
       id: vars
       run: |
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: get-npm-version
+    - name: Get current NPM Version
       id: version
       uses: martinbeentjes/npm-get-version-action@main
       with:
@@ -84,7 +118,7 @@ jobs:
       version: ${{ steps.pass-forward.outputs.version }}
   
   deploy:
-    name: Deploy
+    name: 🚀 Deploy
     runs-on: ubuntu-latest
     needs: create-deployment-image
     steps:
