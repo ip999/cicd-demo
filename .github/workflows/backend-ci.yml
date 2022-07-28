@@ -118,7 +118,7 @@ jobs:
             ip999/backend:latest
             ${{ steps.meta.outputs.tags }}
             ip999/backend:${{ steps.version.outputs.current-version }}
-            ip999/backend:${{ steps.set-bumped-version.outputs.version }}
+            ip999/backend:${{ needs.update-version.outputs.post-bump-version }}
         context: backend
     outputs:
       version: ${{ steps.pass-forward.outputs.version }}
@@ -130,8 +130,8 @@ jobs:
     steps:
     - name: Check we received outputs
       run: |
-        echo ${{needs.create-deployment-image.outputs.version}}
-        echo ${{needs.update-version.outputs.post-bump-version}}
+        post bump: echo ${{ needs.update-version.outputs.post-bump-version }}
+        prev step: echo ${{ needs.create-deployment-image.outputs.version }}
     - name: Check out code
       uses: actions/checkout@v2
     - name: Setup Kustomize
