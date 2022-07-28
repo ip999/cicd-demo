@@ -143,6 +143,10 @@ jobs:
        cd infra/backend/kustomize/base
        kustomize edit set image backend=$DOCKER_USERNAME/backend:${{ needs.create-deployment-image.outputs.version }}
        cat kustomization.yaml
+    - name: Original Commit message
+      run: |
+        echo "${{ github.event.head_commit.message }}"
+        echo "${{ toJSON(github.event) }}"
     - name: ✅ Commit files
       id: vars
       run: |
