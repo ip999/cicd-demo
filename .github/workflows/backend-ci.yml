@@ -130,8 +130,8 @@ jobs:
     steps:
     - name: Check we received outputs
       run: |
-        post bump: echo ${{ needs.update-version.outputs.post-bump-version }}
-        prev step: echo ${{ needs.create-deployment-image.outputs.version }}
+        echo post bump: ${{ needs.update-version.outputs.post-bump-version }}
+        echo prev step: ${{ needs.create-deployment-image.outputs.version }}
     - name: Check out code
       uses: actions/checkout@v2
     - name: Setup Kustomize
