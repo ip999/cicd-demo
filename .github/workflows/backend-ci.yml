@@ -69,7 +69,7 @@ jobs:
         echo ${{ steps.post-bump-version.outputs.current-version }}
         echo "::set-output name=version::${{ steps.version.outputs.current-version }}"
     outputs:
-      post-bump-version: ${{ steps.set-bumped-version.outputs.current-version }}
+      post-bump-version: ${{ steps.set-bumped-version.outputs.version }}
 
 
   create-deployment-image:
@@ -92,7 +92,7 @@ jobs:
       run: |
         echo sha: ${{ steps.vars.outputs.sha_short }}
         echo initial version: ${{ steps.version.outputs.current-version }}
-        echo post bump version: ${{ steps.post-bump-version.outputs.current-version }}
+        echo post bump version: ${{ needs.update-version.outputs.post-bump-version }}
         echo "::set-output name=version::${{ steps.version.outputs.current-version }}"
     - name: 🐳 Docker meta
       id: meta
@@ -118,7 +118,7 @@ jobs:
             ip999/backend:latest
             ${{ steps.meta.outputs.tags }}
             ip999/backend:${{ steps.version.outputs.current-version }}
-            ip999/backend:${{ steps.post-bump-version.outputs.current-version }}
+            ip999/backend:${{ steps.set-bumped-version.outputs.version }}
         context: backend
     outputs:
       version: ${{ steps.pass-forward.outputs.version }}
