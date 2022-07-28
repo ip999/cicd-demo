@@ -130,7 +130,6 @@ jobs:
     steps:
     - name: Check we received outputs
       run: |
-        echo post bump: ${{ needs.update-version.outputs.post-bump-version }}
         echo prev step: ${{ needs.create-deployment-image.outputs.version }}
     - name: Check out code
       uses: actions/checkout@v2
@@ -143,14 +142,14 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
        cd infra/backend/kustomize/base
-       kustomize edit set image backend=$DOCKER_USERNAME/backend:${{needs.update-version.outputs.post-bump-version}}
+       kustomize edit set image backend=$DOCKER_USERNAME/backend:${{ needs.create-deployment-image.outputs.version }}
        cat kustomization.yaml
     - name: ✅ Commit files
       id: vars
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "Bump docker image version: ${{needs.update-version.outputs.post-bump-version}}"
+        git commit -am "Bump docker image version: ${{ needs.create-deployment-image.outputs.version }}"
         echo "::set-output name=sha_short2::$(git rev-parse --short HEAD)"
         git pull --rebase origin main
     - name: Check outputs
