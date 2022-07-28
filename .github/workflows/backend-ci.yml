@@ -55,7 +55,7 @@ jobs:
       uses:  'phips28/gh-action-bump-version@master'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PACKAGEJSON_DIR:  'backend'
+        PACKAGEJSON_DIR: 'backend'
       with:
         commit-message: 'version bump to {{version}} [skip ci]'
     - name: Get current NPM Version (post-bump)
@@ -66,6 +66,8 @@ jobs:
     - name: Show current version (post-bump)
       run: |
         echo ${{ steps.post-bump-version.outputs.current-version }}
+    outputs:
+      post-bump-version: ${{ steps.post-bump-version.outputs.current-version }}
 
 
   create-deployment-image:
@@ -123,7 +125,9 @@ jobs:
     needs: create-deployment-image
     steps:
     - name: Check we received outputs
-      run: echo ${{needs.create-deployment-image.outputs.version}}
+      run: |
+        echo ${{needs.create-deployment-image.outputs.version}}
+        echo ${{needs.update-version.outputs.post-bump-version}}
     - name: Check out code
       uses: actions/checkout@v2
     - name: Setup Kustomize
