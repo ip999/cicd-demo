@@ -93,7 +93,7 @@ jobs:
         echo sha: ${{ steps.vars.outputs.sha_short }}
         echo initial version: ${{ steps.version.outputs.current-version }}
         echo post bump version: ${{ needs.update-version.outputs.post-bump-version }}
-        echo "::set-output name=version::${{ steps.version.outputs.current-version }}"
+        echo "::set-output name=version::${{ needs.update-version.outputs.post-bump-version }}"
     - name: 🐳 Docker meta
       id: meta
       uses: docker/metadata-action@v4
@@ -117,7 +117,6 @@ jobs:
             ip999/backend:${{ github.sha }}
             ip999/backend:latest
             ${{ steps.meta.outputs.tags }}
-            ip999/backend:${{ steps.version.outputs.current-version }}
             ip999/backend:${{ needs.update-version.outputs.post-bump-version }}
         context: backend
     outputs:
