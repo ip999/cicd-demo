@@ -15,6 +15,18 @@ jobs:
     name: 🧪 Initial Tests
     runs-on: ubuntu-latest
     steps:
+      - name: Notify Teams
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            GitHub Action started, 
+            Commit SHA: $(git rev-parse --short HEAD) 
+            Commit MSG: ${{ github.event.head_commit.message }}
+            Compare: ${{ github.event.compare }}
+            "
+          }' \
+          ${{ TEAMS_WEBHOOK_URL }}
       - uses: actions/checkout@v3
       - name: 🐳 Build Docker image 📦
         working-directory: ./backend
