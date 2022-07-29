@@ -15,15 +15,13 @@ jobs:
     name: 🧪 Initial Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Teams
+      - name: 📣 Notify Teams
         run: |
           curl -H 'Content-Type: application/json' -d \
           '{ "text": 
             "
-            GitHub Action started, 
-            Commit SHA: $(git rev-parse --short HEAD) 
-            Commit MSG: ${{ github.event.head_commit.message }}
-            Compare: ${{ github.event.compare }}
+            GitHub Action started
+            View changes: ${{ github.event.compare }}
             "
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
@@ -108,6 +106,15 @@ jobs:
             ${{ steps.meta.outputs.tags }}
             ip999/backend:${{ steps.post-bump-version.outputs.current-version }}
           context: backend
+      - name: 📣 Notify Teams 
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            🥳 Images Pushed to DockerHub 
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
     outputs:
       version: ${{ steps.pass-forward.outputs.version }}
 
@@ -150,3 +157,12 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📣 Notify Teams 
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            🎉 Workflow complete, ArgoCD do your thing...
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
