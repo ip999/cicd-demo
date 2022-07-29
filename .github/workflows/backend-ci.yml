@@ -26,7 +26,7 @@ jobs:
             Compare: ${{ github.event.compare }}
             "
           }' \
-          ${{ TEAMS_WEBHOOK_URL }}
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
       - uses: actions/checkout@v3
       - name: 🐳 Build Docker image 📦
         working-directory: ./backend
