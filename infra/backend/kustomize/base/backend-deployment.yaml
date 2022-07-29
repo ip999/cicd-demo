@@ -10,6 +10,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: backend
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       labels:
@@ -20,3 +26,15 @@ spec:
         image: backend
         ports:
         - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /readiness
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 3

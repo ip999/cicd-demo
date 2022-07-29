@@ -25,7 +25,7 @@ function versionHandler(req, res) {
 }
 
 function readinessHandler(req, res) {
-    res.status(200).send("ready");
+    res.status(200).send("ok");
 }
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
