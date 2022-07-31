@@ -22,3 +22,29 @@ once all is working, protect main branch
 if we get all fancy with appsec...
 add sql part to app
 https://www.npmjs.com/package/better-sqlite3
+
+
+
+
+traefik
+
+
+/var/lib/rancher/k3s/server/manifests/traefik-config.yaml
+
+spec:
+  retry:
+    attempts: 4
+    initialInterval: 100ms
+
+
+
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    dashboard:
+      enabled: true
