@@ -172,7 +172,7 @@ jobs:
           curl -H 'Content-Type: application/json' -d \
           '{ "text": 
             "
-            🎉 Workflow complete, ArgoCD do your thing...
+            🎉 Workflow complete, v${{ needs.create-deployment-image.outputs.version  }} ready for deployment.\n ArgoCD do your thing...
             "
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
