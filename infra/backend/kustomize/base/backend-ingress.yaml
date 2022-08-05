@@ -19,3 +19,4 @@ spec:
   tls:
   - hosts:
     - backend.rancher.localhost
+    - backend.kubernetes.docker.internal
