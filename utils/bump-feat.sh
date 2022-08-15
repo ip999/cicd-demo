@@ -1,6 +1,6 @@
 git status
 git pull
-echo "" >> ../dummy.txt
-git add ../dummy.txt
+echo "" >> ../backend/dummy.txt
+git add ../backend/dummy.txt
 git commit -am "feat: bump"
 git push origin main
