@@ -16,6 +16,16 @@ spec:
             name: backend-service
             port:
               number: 3000
+  - host: box.threatline.io
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3000
   tls:
   - hosts:
     - backend.rancher.localhost
