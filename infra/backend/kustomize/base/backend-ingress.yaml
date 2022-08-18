@@ -20,3 +20,4 @@ spec:
   - hosts:
     - backend.rancher.localhost
     - backend.kubernetes.docker.internal
+    - box.threatline.io
