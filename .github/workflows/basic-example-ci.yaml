@@ -15,8 +15,11 @@ on:
 
 jobs:
   Test:
-
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: 🧪 Initial Tests
+    runs-on: ${{ matrix.os}}
     defaults:
       run:
         working-directory: ./basic-example
