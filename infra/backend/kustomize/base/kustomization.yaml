@@ -9,4 +9,4 @@ namespace: backend
 images:
 - name: backend
   newName: ip999/backend
-  newTag: 4.1.1
+  newTag: 4.2.0
