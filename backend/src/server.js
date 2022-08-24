@@ -1,15 +1,11 @@
-// express api server 
-// receives 2 numbers and returns the sum
-
 //get verson from package.json
 function getVersion() {
     return require('../package.json').version;
 }
 
+const sumHandler = require('./sumHandler');
 const express = require('express');
 const cors = require('cors');
-
-const sumHandler = require('./sumHandler');
 
 const PORT = 3000;
 
@@ -17,11 +13,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.post('/', sumHandler);
+app.get('/health', readinessHandler);
 app.get('/readiness', readinessHandler);
 app.get('/version', versionHandler);
 
 function versionHandler(req, res) {
-    res.status(200).send(getVersion());
+    res.send(getVersion());
 }
 
 function readinessHandler(req, res) {
@@ -29,3 +26,5 @@ function readinessHandler(req, res) {
 }
 
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
+
+

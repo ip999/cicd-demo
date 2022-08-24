@@ -22,19 +22,19 @@ spec:
         app.kubernetes.io/name: backend
     spec:
       containers:
-      - name: backend
-        image: backend
-        ports:
-        - containerPort: 3000
-        livenessProbe:
-          httpGet:
-            path: /readiness
-            port: 3000
-          initialDelaySeconds: 3
-          periodSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /readiness
-            port: 3000
-          initialDelaySeconds: 3
-          periodSeconds: 3
+        - name: backend
+          image: backend
+          ports:
+            - containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 3
