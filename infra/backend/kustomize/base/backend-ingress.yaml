@@ -4,18 +4,11 @@ metadata:
   name: backend-ingress
   labels:
     app.kubernetes.io/name: backend
+  annotations: 
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   rules:
-  - host: backend.rancher.localhost
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: backend-service
-            port:
-              number: 3000
   - host: box.threatline.io
     http:
       paths:
@@ -28,6 +21,5 @@ spec:
               number: 3000
   tls:
   - hosts:
-    - backend.rancher.localhost
-    - backend.kubernetes.docker.internal
     - box.threatline.io
+    secretName: letsencrypt-staging
