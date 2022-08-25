@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: backend
   annotations: 
     kubernetes.io/ingress.class: "traefik"
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
   - host: box.threatline.io
@@ -22,4 +22,4 @@ spec:
   tls:
   - hosts:
     - box.threatline.io
-    secretName: letsencrypt-staging
+    secretName: letsencrypt-prod
