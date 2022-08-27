@@ -19,7 +19,18 @@ spec:
             name: backend-service
             port:
               number: 3000
+  - host: *.demo.threatline.io
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3000
   tls:
   - hosts:
     - box.threatline.io
+    - poo.demo.threatline.io
     secretName: letsencrypt-prod
