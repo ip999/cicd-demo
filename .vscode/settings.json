@@ -1,0 +1,5 @@
+{
+  "terminal.integrated.fontFamily": "monospace",
+  "workbench.colorTheme": "Default Dark+",
+  "terminal.integrated.defaultProfile.linux": "zsh"
+}

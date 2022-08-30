@@ -1,0 +1,186 @@
+name: Backend Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - backend/**
+  pull_request:
+    branches: ["main"]
+    paths:
+      - backend/**
+
+jobs:
+  initial-tests:
+    name: 🧪 Initial Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📣 Notify Teams
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            GitHub Action started... \n
+            Commit msg: ${{ github.event.head_commit.message }} \n
+            View changes: ${{ github.event.compare }}
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+      - uses: actions/checkout@v3
+      - name: ✨ Setup Node.js
+        uses: actions/setup-node@v3
+      - name: 🧶 Install dependencies
+        working-directory: ./backend
+        run: yarn install --frozen-lockfile
+      - name: 🃏 Jest tests
+        working-directory: ./backend
+        run: yarn test
+      - name: 🐳 Build Docker image 📦
+        working-directory: ./backend
+        run: docker-compose -f docker-compose.yml build
+      - name: 🐳 Docker run 🏃‍♂️
+        working-directory: ./backend
+        run: docker-compose -f docker-compose.yml up -d
+      - name: 🐳 Show Docker status
+        run: docker ps
+      - name: 🕗 Wait on container readiness
+        uses: iFaxity/wait-on-action@v1
+        with:
+          resource: http-get://localhost:3000/readiness
+          timeout: 3000
+      - name: 🧪 Check API response
+        run: |
+          curl -s -X POST -H "Content-Type: application/json" -d '{"a": 1, "b": 2}' http://localhost:3000
+      - name: 🐳 Shutdown container
+        working-directory: ./backend
+        run: docker-compose -f docker-compose.yml down
+
+  create-deployment-image:
+    name: 🏗️ Create deployment image
+    needs: initial-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📣 Notify Teams
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            ✔️ Test step successful, commencing production build..
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+      - uses: actions/checkout@v3
+      - name: 🔍 Get Short SHA (HEAD ref)
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Get current NPM Version (pre-bump)
+        id: version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: backend
+      - name: 👊 Automated Version Bump
+        uses: "phips28/gh-action-bump-version@master"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR: "backend"
+        with:
+          commit-message: "version bump to {{version}} [skip ci]"
+      - name: Get current NPM Version (post-bump)
+        id: post-bump-version
+        uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: backend
+      - name: Check outputs and pass to future jobs
+        id: pass-forward
+        run: |
+          echo sha: ${{ steps.vars.outputs.sha_short }}
+          echo initial version: ${{ steps.version.outputs.current-version }}
+          echo post bump version: ${{ steps.post-bump-version.outputs.current-version }}
+          cat backend/package.json
+          echo "::set-output name=version::${{ steps.post-bump-version.outputs.current-version }}"
+      - name: 🐳 Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ip999/backend
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+      - name: 🔓 Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: 🔨 🐳 Build and push docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            ip999/backend:${{ github.sha }}
+            ip999/backend:latest
+            ${{ steps.meta.outputs.tags }}
+            ip999/backend:${{ steps.post-bump-version.outputs.current-version }}
+          context: backend
+      - name: 📣 Notify Teams
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            🥳 Images Pushed to DockerHub 
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+    outputs:
+      version: ${{ steps.pass-forward.outputs.version }}
+
+  deploy:
+    name: 🚀 Deploy
+    runs-on: ubuntu-latest
+    needs: create-deployment-image
+    steps:
+      - name: Check we received outputs
+        run: |
+          echo prev step: ${{ needs.create-deployment-image.outputs.version }}
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize-version: "4.5.5"
+      - name: 📝 Update Kubernetes resources
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          cd infra/backend/kustomize/base
+          kustomize edit set image backend=$DOCKER_USERNAME/backend:${{ needs.create-deployment-image.outputs.version }}
+          cat kustomization.yaml
+      - name: Original Commit message
+        run: |
+          echo "${{ github.event.head_commit.message }}"
+          echo "${{ toJSON(github.event) }}"
+      - name: ✅ Commit files
+        id: vars
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "Bump docker image version: ${{ needs.create-deployment-image.outputs.version }}. Original commit message: ${{ github.event.head_commit.message }}"
+          echo "::set-output name=sha_short2::$(git rev-parse --short HEAD)"
+          git pull --rebase origin main
+      - name: Check outputs
+        run: echo ${{ steps.vars.outputs.sha_short2 }}
+      - name: 🚀 Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📣 Notify Teams
+        run: |
+          curl -H 'Content-Type: application/json' -d \
+          '{ "text": 
+            "
+            🎉 Workflow complete, v${{ needs.create-deployment-image.outputs.version  }} ready for deployment.\n ArgoCD do your thing...
+            "
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}

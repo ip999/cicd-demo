@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-ingress
+  labels:
+    app.kubernetes.io/name: backend
+  annotations: 
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: "box.threatline.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3000
+  - host: "*.demo.threatline.io"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 3000
+  tls:
+  - hosts:
+    - box.threatline.io
+    - poo.demo.threatline.io
+    - foo.demo.threatline.io
+    secretName: letsencrypt-prod

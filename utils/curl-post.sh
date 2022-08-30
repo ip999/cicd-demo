@@ -1,0 +1,1 @@
+curl -s -X POST -H "Content-Type: application/json" -d '{"a": 1, "b": 2}' http://localhost:3000
