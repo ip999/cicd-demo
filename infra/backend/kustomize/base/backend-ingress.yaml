@@ -32,5 +32,5 @@ spec:
   tls:
     - hosts:
         - box.threatline.io
-        - foo.demo.threatline.io
+        - cat.demo.threatline.io
       secretName: letsencrypt-prod
