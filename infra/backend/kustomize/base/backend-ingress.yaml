@@ -43,4 +43,5 @@ spec:
     - hosts:
         - box.threatline.io
         - cat.demo.threatline.io
+        - yf.threatline.io
       secretName: letsencrypt-prod
