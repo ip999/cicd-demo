@@ -4,7 +4,7 @@ import redis
 import json
 
 app = Flask(__name__)
-cache = redis.Redis(host='red-ci9i4g59aq02iht9og6g', port=6379)
+cache = redis.Redis(host='redis', port=6379)
 redis_ttl = 900
 
 @app.route('/')
