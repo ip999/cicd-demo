@@ -21,6 +21,14 @@ def news():
     news = stock.news
     return jsonify(news)
 
+@app.route('/health')
+def health():
+    return "ok"
+
+@app.route('/readiness')
+def readiness():
+    return "ok"
+
 @app.route('/cached')
 def cached():
     ticker = request.args.get('ticker')

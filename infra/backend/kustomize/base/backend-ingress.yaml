@@ -19,6 +19,16 @@ spec:
                 name: backend-service
                 port:
                   number: 3000
+    - host: "yf.threatline.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: yf-service
+                port:
+                  number: 5000
     - host: "*.demo.threatline.io"
       http:
         paths:

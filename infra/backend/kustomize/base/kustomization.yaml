@@ -5,6 +5,8 @@ resources:
 - backend-deployment.yaml
 - backend-service.yaml
 - backend-ingress.yaml
+- yf-deployment.yaml
+- yf-service.yaml
 namespace: backend
 images:
 - name: backend
