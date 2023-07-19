@@ -26,6 +26,7 @@ spec:
           image: ip999/yf
           ports:
             - containerPort: 5000
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /health
