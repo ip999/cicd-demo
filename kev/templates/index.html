@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vulnerabilities</title>
+  </head>
+  <body>
+    <h1>Known Exploited Vulnerabilities</h1>
+    <ul>
+      {% for vuln in vulnerabilities %}
+      <li>
+        <a href="{{ url_for('vulnerability', cve_id=vuln[2]) }}"
+          >{{ vuln[2] }}: {{ vuln[4] }}</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
