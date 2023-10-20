@@ -29,6 +29,16 @@ spec:
                 name: yf-service
                 port:
                   number: 5000
+    - host: "kev.threatline.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: kev-service
+                port:
+                  number: 5000
     - host: "*.demo.threatline.io"
       http:
         paths:
@@ -44,4 +54,5 @@ spec:
         - box.threatline.io
         - cat.demo.threatline.io
         - yf.threatline.io
+        - kev.threatline.io
       secretName: letsencrypt-prod
