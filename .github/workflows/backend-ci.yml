@@ -6,11 +6,13 @@ on:
     paths:
       - backend/**
       - yf/**
+      - kev/**
   pull_request:
     branches: ["main"]
     paths:
       - backend/**
       - yf/**
+      - kev/**
 jobs:
   initial-tests:
     name: 🧪 Initial Tests
