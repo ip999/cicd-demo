@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: kev
-          image: ip999/kev:latest-broken
+          image: ip999/kev:latest
           ports:
             - containerPort: 5000
           imagePullPolicy: Always
