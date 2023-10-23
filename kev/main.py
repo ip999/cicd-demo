@@ -2,6 +2,19 @@ import requests
 import sqlite3
 import json
 from datetime import datetime
+import logging
+import sys
+
+
+
+# Logging setup
+# logging.basicConfig(filename='app.log', level=logging.INFO, 
+#                     format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+logging.info('Script started running.')
+
 
 # Constants
 URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
@@ -63,6 +76,7 @@ def init_db():
 
 
 def fetch_data():
+    logging.info("Fetching data")
     response = requests.get(URL)
     if response.status_code == 200:
         return response.json()
@@ -75,6 +89,7 @@ def fetch_data():
 
 
 def process_data(data):
+    logging.info("Processing data...")
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
 
@@ -98,6 +113,7 @@ def process_data(data):
                     cur.execute("""
                         INSERT INTO Changes (VulnerabilityID, ChangedDate, ChangedKey, OldValue, NewValue) VALUES (?, ?, ?, ?, ?)
                     """, (existing_vuln[0], datetime.now(), key, existing_vuln[vuln.keys().index(key) + 2], value))
+                    logging.info(f"Change detected for CVEID {cve_id}. Key: {key}. Old value: {existing_vuln[vuln.keys().index(key) + 2]}. New value: {value}.")
 
             # Update the existing record
             columns = ", ".join([f"{k} = ?" for k in vuln.keys()])
@@ -116,8 +132,11 @@ def process_data(data):
     conn.close()
 
 
-if __name__ == "__main__":
+def update_data_from_source():
     init_db()
     data = fetch_data()
     if data:
         process_data(data)
+
+if __name__ == "__main__":
+    update_data_from_source()
