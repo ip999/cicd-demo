@@ -1,5 +1,6 @@
 import requests
-import sqlite3
+#import sqlite3
+import psycopg2
 import json
 from datetime import datetime
 import logging
@@ -18,19 +19,21 @@ logging.info('Script started running.')
 
 # Constants
 URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
-DATABASE = "kev_monitor.db"
+#DATABASE = "kev_monitor.db"
 
 # Database initialization
 
 
 def init_db():
-    conn = sqlite3.connect(DATABASE)
+    #conn = sqlite3.connect(DATABASE)
+    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+
     cur = conn.cursor()
 
     # Main Table
     cur.execute("""
         CREATE TABLE IF NOT EXISTS Main (
-            MainID INTEGER PRIMARY KEY,
+            MainID SERIAL PRIMARY KEY,
             CatalogVersion TEXT,
             DateReleased TEXT,
             Count INTEGER,
@@ -41,8 +44,9 @@ def init_db():
     # Vulnerabilities Table
     cur.execute("""
         CREATE TABLE IF NOT EXISTS Vulnerabilities (
-            VulnerabilityID INTEGER PRIMARY KEY,
+            VulnerabilityID SERIAL PRIMARY KEY,
             MainID INTEGER,
+            REFERENCES Main(MainID),
             CVEID TEXT UNIQUE,
             VendorProject TEXT,
             Product TEXT,
@@ -60,8 +64,9 @@ def init_db():
     # Changes Table
     cur.execute("""
         CREATE TABLE IF NOT EXISTS Changes (
-            ChangeID INTEGER PRIMARY KEY,
+            ChangeID SERIAL PRIMARY KEY,
             VulnerabilityID INTEGER,
+            REFERENCES Vulnerabilities(VulnerabilityID),
             ChangedDate TEXT,
             ChangedKey TEXT,
             OldValue TEXT,
@@ -90,7 +95,8 @@ def fetch_data():
 
 def process_data(data):
     logging.info("Processing data...")
-    conn = sqlite3.connect(DATABASE)
+    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+
     cur = conn.cursor()
 
     # Insert main data
