@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: yf
-          image: ip999/yf:v1
+          image: ip999/yf:v1.1
           ports:
             - containerPort: 5000
           imagePullPolicy: Always
