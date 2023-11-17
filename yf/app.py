@@ -16,7 +16,7 @@ def info():
 
 @app.route('/version')
 def version():
-    return "1.1"
+    return "1.2"
 
 @app.route('/news')
 def news():
