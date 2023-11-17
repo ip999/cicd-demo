@@ -15,4 +15,4 @@ namespace: backend
 images:
 - name: backend
   newName: ip999/backend
-  newTag: 0.0.24
+  newTag: 0.0.25
