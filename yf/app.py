@@ -14,6 +14,10 @@ def info():
     info = stock.info
     return jsonify(info)
 
+@app.route('/version')
+def version():
+    return "1.1"
+
 @app.route('/news')
 def news():
     ticker = request.args.get('ticker')
