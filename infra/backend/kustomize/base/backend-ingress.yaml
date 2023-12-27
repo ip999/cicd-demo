@@ -39,6 +39,16 @@ spec:
                 name: kev-service
                 port:
                   number: 5000
+    - host: "tika.threatline.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: tika-service
+                port:
+                  number: 5000
     - host: "*.demo.threatline.io"
       http:
         paths:

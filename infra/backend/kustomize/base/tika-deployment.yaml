@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika-deployment
+  labels:
+    app.kubernetes.io/name: tika
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tika
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tika
+    spec:
+      containers:
+        - name: tika
+          image: apache/tika:latest
+          ports:
+            - containerPort: 9998
+          imagePullPolicy: Always

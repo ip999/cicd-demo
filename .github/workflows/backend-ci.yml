@@ -7,12 +7,15 @@ on:
       - backend/**
       - yf/**
       - kev/**
+      - tika/**
   pull_request:
     branches: ["main"]
     paths:
       - backend/**
       - yf/**
       - kev/**
+      - tika/**
+  workflow_dispatch:
 jobs:
   initial-tests:
     name: 🧪 Initial Tests
