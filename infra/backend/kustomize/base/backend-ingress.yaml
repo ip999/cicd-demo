@@ -48,7 +48,7 @@ spec:
               service:
                 name: tika-service
                 port:
-                  number: 5000
+                  number: 9998
     - host: "*.demo.threatline.io"
       http:
         paths:
