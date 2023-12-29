@@ -28,10 +28,10 @@ spec:
             - containerPort: 9998
           imagePullPolicy: Always
           resources:
-          limits:
-            cpu: "500m"
-          requests:
-            cpu: "250m"
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 250m
           livenessProbe:
             httpGet:
               path: "/" # Default path, change if needed
