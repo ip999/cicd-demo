@@ -5,8 +5,8 @@ metadata:
   labels:
     app.kubernetes.io/name: tika
 spec:
-  replicas: 3
-  revisionHistoryLimit: 3
+  replicas: 1
+  revisionHistoryLimit: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: tika
@@ -27,3 +27,26 @@ spec:
           ports:
             - containerPort: 9998
           imagePullPolicy: Always
+          resources:
+          limits:
+            cpu: "500m"
+          requests:
+            cpu: "250m"
+          livenessProbe:
+            httpGet:
+              path: "/" # Default path, change if needed
+              port: 9998 # Replace with your service port
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 20
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: "/" # Default path, change if needed
+              port: 9998 # Replace with your service port
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 20
+            periodSeconds: 5

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tiktoken-service
+spec:
+  selector:
+    app.kubernetes.io/name: tiktoken
+  ports:
+    - name: tiktoken-api-port
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

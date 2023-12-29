@@ -5,7 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: backend
 spec:
-  replicas: 3
+  replicas: 0
   revisionHistoryLimit: 3
   selector:
     matchLabels:
