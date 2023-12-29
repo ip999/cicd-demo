@@ -9,12 +9,8 @@ resources:
   - yf-service.yaml
   - redis-deployment.yaml
   - redis-service.yaml
-  # - kev-deployment.yaml
-  # - kev-service.yaml
   - tika-deployment.yaml
   - tika-service.yaml
-  # - tiktoken-deployment.yaml
-  # - tiktoken-service.yaml
 namespace: backend
 images:
   - name: backend

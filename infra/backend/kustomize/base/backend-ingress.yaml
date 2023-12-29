@@ -29,26 +29,6 @@ spec:
                 name: yf-service
                 port:
                   number: 5000
-    - host: "kev.threatline.io"
-      http:
-        paths:
-          - pathType: Prefix
-            path: "/"
-            backend:
-              service:
-                name: kev-service
-                port:
-                  number: 5000
-    - host: "tiktoken.threatline.io"
-      http:
-        paths:
-          - pathType: Prefix
-            path: "/"
-            backend:
-              service:
-                name: tiktoken-service
-                port:
-                  number: 5000
     - host: "tika.threatline.io"
       http:
         paths:
@@ -74,6 +54,5 @@ spec:
         - box.threatline.io
         - cat.demo.threatline.io
         - yf.threatline.io
-        - kev.threatline.io
         - tika.threatline.io
       secretName: letsencrypt-prod
